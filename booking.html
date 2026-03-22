@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Worker - WorkerConnect</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="logo">Worker<span>Connect</span></a>
+    <div class="search-bar">
+      <div class="location-box">
+        <span>📍</span>
+        <input type="text" placeholder="City" value="Mumbai" />
+      </div>
+      <input type="text" class="search-input" placeholder="Search for Plumber, Electrician..." />
+      <button class="search-btn">🔍</button>
+    </div>
+    <div class="nav-links">
+      <span id="navUser"></span>
+      <a href="login.html" id="navLogin">Login</a>
+      <a href="#" id="navLogout" style="display:none;" onclick="logout()">Logout</a>
+    </div>
+  </nav>
+
+  <div class="form-container">
+    <h2>Book a Worker</h2>
+    <p class="form-subtitle">Fill in the details and we'll confirm your booking</p>
+    <form id="bookingForm">
+      <input type="text" id="address" placeholder="Your Address" required />
+      <input type="date" id="date" required />
+      <input type="time" id="time" required />
+      <input type="text" id="problem" placeholder="Describe the problem" required />
+      <p id="msg" style="color:green;text-align:center;"></p>
+      <button type="submit">Confirm Booking</button>
+    </form>
+  </div>
+
+  <footer><p>© 2026 WorkerConnect. All rights reserved.</p></footer>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      document.getElementById('navUser').textContent = 'Hi, ' + user.name;
+      document.getElementById('navLogin').style.display = 'none';
+      document.getElementById('navLogout').style.display = 'inline';
+    }
+    function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+
+    document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('msg');
+      const token = localStorage.getItem('token');
+      if (!user || !token) { window.location.href = 'login.html'; return; }
+
+      const params = new URLSearchParams(window.location.search);
+      const workerId = params.get('workerId') || '000000000000000000000000';
+
+      const res = await fetch('http://localhost:5000/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({
+          userId: user.id, workerId,
+          address: document.getElementById('address').value,
+          date: document.getElementById('date').value,
+          time: document.getElementById('time').value,
+          problem: document.getElementById('problem').value
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        msg.textContent = 'Booking confirmed!';
+        document.getElementById('bookingForm').reset();
+      } else {
+        msg.style.color = 'red';
+        msg.textContent = data.message;
+      }
+    });
+  </script>
+
+</body>
+</html>

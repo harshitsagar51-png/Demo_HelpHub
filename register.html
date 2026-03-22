@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register - WorkerConnect</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="logo">Worker<span>Connect</span></a>
+    <div class="search-bar">
+      <div class="location-box">
+        <span>📍</span>
+        <input type="text" placeholder="City" value="Mumbai" />
+      </div>
+      <input type="text" class="search-input" placeholder="Search for Plumber, Electrician..." />
+      <button class="search-btn">🔍</button>
+    </div>
+    <div class="nav-links">
+      <a href="login.html">Login</a>
+      <a href="register.html">Register</a>
+    </div>
+  </nav>
+
+  <div class="form-container">
+    <h2>Create Account</h2>
+    <p class="form-subtitle">Join WorkerConnect today</p>
+    <form id="registerForm">
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <select id="role">
+        <option value="">I am a...</option>
+        <option value="user">User (looking for workers)</option>
+        <option value="worker">Worker (offering services)</option>
+      </select>
+      <p id="msg" style="color:red;text-align:center;"></p>
+      <button type="submit">Create Account</button>
+    </form>
+    <p>Already have an account? <a href="login.html">Login</a></p>
+  </div>
+
+  <footer><p>© 2026 WorkerConnect. All rights reserved.</p></footer>
+
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('msg');
+      const res = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value,
+          role: document.getElementById('role').value
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        window.location.href = 'index.html';
+      } else {
+        msg.textContent = data.message;
+      }
+    });
+  </script>
+
+</body>
+</html>

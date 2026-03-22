@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Find Workers - WorkerConnect</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+    body{background:#f0f2f5;color:#1e293b}
+    .navbar{display:flex;align-items:center;gap:16px;padding:12px 32px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.1);position:sticky;top:0;z-index:100}
+    .logo{font-size:22px;font-weight:800;color:#e8520a;text-decoration:none;flex-shrink:0}
+    .logo span{color:#1e293b}
+    .search-bar{flex:1;display:flex;align-items:center;border:2px solid #ddd;border-radius:8px;overflow:hidden;background:#fff}
+    .location-box{display:flex;align-items:center;gap:6px;padding:0 12px;background:#f8f8f8;height:42px;border-right:2px solid #ddd;flex-shrink:0}
+    .location-box input{border:none;outline:none;background:transparent;font-size:14px;width:80px}
+    .search-input{flex:1;border:none;outline:none;padding:0 14px;font-size:14px;height:42px}
+    .search-btn{background:#e8520a;border:none;padding:0 18px;height:42px;font-size:16px;cursor:pointer;color:#fff;flex-shrink:0}
+    .nav-links{display:flex;align-items:center;gap:16px;flex-shrink:0}
+    .nav-links span{font-size:14px;font-weight:600;color:#1e293b}
+    .nav-links a{text-decoration:none;font-size:14px;font-weight:500;color:#475569}
+    .nav-links a:hover{color:#e8520a}
+    #navLogout{color:#ef4444!important}
+    .workers-section{max-width:1200px;margin:0 auto;padding:40px 32px}
+    .workers-section h2{font-size:24px;font-weight:700;margin-bottom:28px;text-align:center}
+    .worker-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
+    .worker-card{background:#fff;border-radius:14px;padding:28px 20px;text-align:center;box-shadow:0 1px 8px rgba(0,0,0,.07);transition:transform .2s,box-shadow .2s}
+    .worker-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+    .worker-card .avatar{font-size:52px;display:block;margin-bottom:14px}
+    .worker-card h3{font-size:17px;font-weight:700;margin-bottom:6px}
+    .worker-card .profession{color:#e8520a;font-weight:600;font-size:13px;margin-bottom:4px}
+    .worker-card .rate{color:#64748b;font-size:13px;margin-bottom:18px}
+    .btn{display:inline-block;background:#e8520a;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;transition:background .2s}
+    .btn:hover{background:#c94208}
+    footer{text-align:center;padding:24px;background:#1e293b;color:#94a3b8;font-size:13px;margin-top:40px}
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="logo">Worker<span>Connect</span></a>
+    <div class="search-bar">
+      <div class="location-box"><span>📍</span><input type="text" placeholder="City" value="Mumbai" /></div>
+      <input type="text" class="search-input" placeholder="Search for Plumber, Electrician..." />
+      <button class="search-btn">🔍</button>
+    </div>
+    <div class="nav-links">
+      <span id="navUser"></span>
+      <a href="login.html" id="navLogin">Login</a>
+      <a href="register.html" id="navRegister">Register</a>
+      <a href="#" id="navLogout" style="display:none" onclick="logout()">Logout</a>
+    </div>
+  </nav>
+
+  <section class="workers-section">
+    <h2>Available Workers</h2>
+    <div class="worker-grid">
+      <div class="worker-card"><span class="avatar">👨‍🔧</span><h3>Ramesh Kumar</h3><p class="profession">🔧 Plumber · ⭐ 4.8</p><p class="rate">₹300/hr</p><a href="booking.html" class="btn">Book Now</a></div>
+      <div class="worker-card"><span class="avatar">👷</span><h3>Suresh Patel</h3><p class="profession">⚡ Electrician · ⭐ 4.6</p><p class="rate">₹350/hr</p><a href="booking.html" class="btn">Book Now</a></div>
+      <div class="worker-card"><span class="avatar">🧑‍🔨</span><h3>Manoj Singh</h3><p class="profession">🪚 Carpenter · ⭐ 4.7</p><p class="rate">₹400/hr</p><a href="booking.html" class="btn">Book Now</a></div>
+      <div class="worker-card"><span class="avatar">🧑‍🎨</span><h3>Vijay Sharma</h3><p class="profession">🎨 Painter · ⭐ 4.5</p><p class="rate">₹250/hr</p><a href="booking.html" class="btn">Book Now</a></div>
+    </div>
+  </section>
+
+  <footer><p>© 2026 WorkerConnect. All rights reserved.</p></footer>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      document.getElementById('navUser').textContent = 'Hi, ' + user.name;
+      document.getElementById('navLogin').style.display = 'none';
+      document.getElementById('navRegister').style.display = 'none';
+      document.getElementById('navLogout').style.display = 'inline';
+    }
+    function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+  </script>
+</body>
+</html>
